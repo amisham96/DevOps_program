@@ -1,0 +1,6 @@
+---
+# tasks file for tomcat
+# Calling install-jdk.yml file from here
+- import_tasks: install-jdk.yml
+- import_tasks: user.yml
+- import_tasks: tomcat.yml

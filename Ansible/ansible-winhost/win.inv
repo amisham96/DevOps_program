@@ -1,0 +1,7 @@
+[winhost]
+10.1.0.7
+[winhost:vars]
+ansible_user=amit
+ansible_password=Amit@#$12345
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore

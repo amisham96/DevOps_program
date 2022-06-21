@@ -1,0 +1,4 @@
+---
+# tasks file for nginx
+- import_tasks: firewall.yml
+- import_tasks: nginx.yml

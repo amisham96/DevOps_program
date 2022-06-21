@@ -1,0 +1,13 @@
+---
+#ansy playbook start with three dash
+-
+###this minus in yaml indicate a list of items. the play contains a list of play
+  hosts: ansiblenode
+   
+  tasks:
+me: install openjdk
+      apt:
+        name: "{{ java_openjdk_package_name }}"
+        update_cache: true
+        state: present
+    

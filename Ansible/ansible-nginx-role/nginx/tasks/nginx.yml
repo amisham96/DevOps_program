@@ -1,0 +1,52 @@
+---
+- name: install epel release
+  dnf: 
+    name: "{{nginx_download_rpm_url}}"
+    update_cache: yes
+    state: present #present or absent
+  when: ansible_distribution == "RedHat"
+- name: install patch
+  yum:
+    name: patch
+    update_cache: yes
+    state: latest
+  when: ansible_distribution == "RedHat"
+
+- name: patch the nginx.conf include site-availability , default server entry
+  patch: #this patch module has root privilage
+    src: files/nginx.conf.redhat.patch
+    dest: /etc/nginx/nginx.conf
+  when: ansible_distribution == "RedHat"
+
+- name: create a directory /etc/nginx/sites-available
+  file:
+    path: /etc/nginx/sites-available
+    state: directory
+
+- name: create a directory /etc/nginx/sites-enabled
+  file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+
+- name: copy the default nginx configuration
+  copy:
+    src: files/nginx-default.conf
+    dest: /etc/nginx/sites-available/default
+
+- name: create a symbolic link /etc/nginx/sites-available/default to /etc/nginx/sites-enablehd/default
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+
+- name: we will create push our own file using jinja 2 template
+  template:
+    src: templates/index.html.j2
+    dest: /usr/share/nginx/html/index.html
+
+- name: restart nginx server
+  service:
+  #systemctl restart httpd service
+    name: nginx
+    state: restarted
+  notify: check http service

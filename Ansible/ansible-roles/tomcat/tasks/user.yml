@@ -1,0 +1,8 @@
+---
+- name: Create a Tomcat User
+  user:
+    name: tomcat
+
+- name: Create a Tomcat group
+  group:
+    name: tomcat

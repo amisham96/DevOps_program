@@ -1,0 +1,9 @@
+---
+- name: check http service
+  uri: 
+    url: http://{{ ansible_default_ipv4.address }}
+    status_code: 200
+- name: Reload Firewalld
+  service:
+    name: firewalld
+    state: reload
