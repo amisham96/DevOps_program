@@ -1,3 +1,3 @@
 # -*- coding:utf-8 -*-
-print ("hello amit\n"*2)
+print ("hello amit Welcome to the world\n"*10)
 
