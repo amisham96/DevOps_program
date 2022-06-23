@@ -1,0 +1,52 @@
+---
+#ansy playbook start with three dash
+-
+###this minus in yaml indicate a list of items. the play contains a list of play
+  hosts: dockerclient1
+  vars:
+    container_count: 4
+    default_container_name: myconatiner 
+    default_container_image: a30sham/customapp
+    default_container_command: sleep 1
+
+  tasks:
+    - name: Updating all installed packages
+      shell: yum update --nobest
+
+    - name: Docker repo
+      yum_repository:
+        name: docker
+        description: repo for docker
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+        gpgcheck: no
+
+    - name: Installing docker
+      command:
+        cmd: yum install docker-ce --nobest -y
+
+    - name: install python3.6
+      package:
+        name: python36
+        state: present
+
+    - name: Starting and enabling docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: conf pip for docker
+      pip:
+        name: docker-py
+
+    - name: Pulling docker image
+      docker_image:
+        name: "{{default_container_image}}"
+        source: pull
+
+    - name: run the docker container
+      docker_container:
+        name: "{{default_container_name}}{{item}}"
+        image: "{{default_container_image}}"
+        command: "{{default_container_command}}"
+      with_sequence: count={{container_count}}
