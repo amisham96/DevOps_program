@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.bezkoder.spring.datajpa.model.Tutorial;
+import com.myapp.spring.datajpa.model.Tutorial;
 
 public interface TutorialRepository extends JpaRepository<Tutorial, Long> {
 	List<Tutorial> findByPublished(boolean published);

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bezkoder.spring.datajpa.model.Tutorial;
-import com.bezkoder.spring.datajpa.repository.TutorialRepository;
+import com.myapp.spring.datajpa.model.Tutorial;
+import com.myapp.spring.datajpa.repository.TutorialRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
