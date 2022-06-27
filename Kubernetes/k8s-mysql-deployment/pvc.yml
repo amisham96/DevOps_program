@@ -1,0 +1,12 @@
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: task-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+    # we need to map pv with pvc so that pod can use the claim. 
+  storageClassName: nodestorage #this is the name of the storage or resource provision by persistent volume
+  resources:
+    requests:
+      storage: 10Gi 
