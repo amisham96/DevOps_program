@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emp
+  template:
+    metadata:
+      name: emp-pod
+      labels:
+        app: emp
+    spec:
+      containers:
+        - name: emp-container
+          image: a30sham/employeeapp
+          ports:
+           - containerPort: 8080
