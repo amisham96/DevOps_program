@@ -7,5 +7,5 @@ spec:
   selector:
     app: myapp #in service selector should match watever deployment you have created
   ports:
-  - port: 8080 #service port
-    targetPort: 8080 # container port
+  - port: 80 #service port
+    targetPort: 80 # container port

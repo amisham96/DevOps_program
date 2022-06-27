@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: myapp-container
-          image: a30sham/employeeapp
+          image: nginx
           ports:
-           - containerPort: 8080
+           - containerPort: 80
