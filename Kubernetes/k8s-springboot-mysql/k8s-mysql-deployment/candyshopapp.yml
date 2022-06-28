@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: candyshopapp
+  labels:
+    app: candyshopapp
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: candyshopapp
+  
+  template: #container template deploy in three pod
+    metadata:
+      name: candyshopapp   #using metadata name
+      labels: 
+        app: candyshopapp  #this label should match with pod label. 
+    spec: #we define container spec
+        containers:
+          - name: candyshopapp  
+            image: a30sham/candyshopapp
+            ports:
+              - containerPort: 8080 
+            env:
+              - name: MYSQL_HOST
+                value: "192.168.157.26"
+              - name: MYSQL_PORT
+                value: "3306"
+              - name: MYSQL_DB 
+                value: "webappdb"
+              - name: MYSQL_USER
+                value: "root"
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                #this two value come from mysqlsecret.yml 
+                    name: my-db-secret #this is the name of the secret
+                    key: dbpassword
