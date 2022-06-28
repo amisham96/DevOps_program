@@ -1,0 +1,41 @@
+apiVersion: apps/v1 #we know that all the communication in k8s happen through api. 
+#what we want to create
+#inside kind you need to define type of api you want to execute. 
+kind: Deployment #pod#service
+metadata: #using metada and name we define the name of deployment
+  name: employeemgmt #a deployment name myapp-deployment is created using .metadata.name field
+  labels:
+    app: employeemgmt
+spec: #inside your deployment we need to provide spec how this deployment api will launch your pod
+  replicas: 1 #it will create three pod
+  selector: #the .spec.selector file define ho the deployment find which pod to manage. 
+    matchLabels: #.spec.selector.matchlabel it is euqivalent to map ke,value. something called as match expression
+      app: employeemgmt
+  
+  template: #container template deploy in three pod
+    metadata:
+      name: employeemgmt   #using metadata name
+      labels: 
+        app: employeemgmt  #this label should match with pod label. 
+    spec: #we define container spec
+        
+        containers:
+          - name: employeemgmt  
+            image: a30sham/employeemgmt
+            ports:
+              - containerPort: 8080
+                name: mysql 
+            env:
+              - name: MYSQL_HOST
+                value: 192.168.157.34
+              - name: MYSQL_PORT
+                value: "3306"
+              - name: MYSQL_DATABASE
+                value: "employeedb"
+              - name: MYSQL_USER
+                value: "root"
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mydbsecret #this is the name of the secret
+                    key: dbpassword

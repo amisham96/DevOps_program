@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mydbsecret
+                key: dbpassword
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+          - name: mysql-persistent-volume
+            mountPath: /var/lib/mysql
+          - name: mysql-dbscript 
+            mountPath: /docker-entrypoint-initdb.d
+        
+      volumes:
+        - name: mysql-persistent-volume 
+          persistentVolumeClaim:
+            claimName: mypvc
+        - name: mysql-dbscript
+          configMap: 
+            name: myapp-config
