@@ -1,0 +1,35 @@
+apiVersion: apps/v1 #we know that all the communication in k8s happen through api. 
+#what we want to create
+#inside kind you need to define type of api you want to execute. 
+kind: StatefulSet #pod#service
+metadata: #using metada and name we define the name of deployment
+  name: mysql-set #a deployment name myapp-deployment is created using .metadata.name field
+spec: #inside your deployment we need to provide spec how this deployment api will launch your pod
+  replicas: 3 #it will create three pod
+  selector: #the .spec.selector file define ho the deployment find which pod to manage. 
+    matchLabels: #.spec.selector.matchlabel it is euqivalent to map ke,value. something called as match expression
+      app: mysql 
+  serviceName: "mysql"
+  template: #container template deploy in three pod
+    metadata:
+
+      labels: 
+        app: mysql  #this label should match with pod label. 
+    spec: #we define container spec
+        containers:
+          - name: mysql  
+            image: mysql:5.7
+            env:
+              - name: MYSQL_ROOT_PASSWORD 
+                valueFrom:
+                  secretKeyRef:
+                #this two value come from mysqlsecret.yml 
+                    name: my-db-state #this is the name of the secret
+                    key: db-password #data of the secret 
+            ports:
+              - containerPort: 3306 
+                name: mysql 
+              #this volume mount is inside my container
+            volumeMounts:
+            - name: mysql-store
+              mountPath: /var/lib/mysql

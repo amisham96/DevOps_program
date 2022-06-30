@@ -1,0 +1,50 @@
+apiVersion: apps/v1 #we know that all the communication in k8s happen through api. 
+#what we want to create
+#inside kind you need to define type of api you want to execute. 
+kind: Deployment #pod#service
+metadata: #using metada and name we define the name of deployment
+  name: mysql #a deployment name myapp-deployment is created using .metadata.name field
+  labels:
+    app: myapp 
+spec: #inside your deployment we need to provide spec how this deployment api will launch your pod
+  replicas: 1 #it will create three pod
+  selector: #the .spec.selector file define ho the deployment find which pod to manage. 
+    matchLabels: #.spec.selector.matchlabel it is euqivalent to map ke,value. something called as match expression
+      app: mysql 
+  strategy:
+    type: Recreate
+  template: #container template deploy in three pod
+    metadata:
+      name: myapp-mysql   #using metadata name
+      labels: 
+        app: mysql  #this label should match with pod label. 
+    spec: #we define container spec
+        containers:
+          - name: mysql  
+            image: mysql:5.6 
+            env:
+              - name: MYSQL_ROOT_PASSWORD 
+                valueFrom:
+                  secretKeyRef:
+                #this two value come from mysqlsecret.yml 
+                    name: my-db-secret #this is the name of the secret
+                    key: db-password #data of the secret 
+            ports:
+              - containerPort: 3306 
+                name: mysql 
+              #this volume mount is inside my container
+            volumeMounts:
+            - name: mysql-persistent-volume  
+              mountPath: /var/lib/mysql 
+                #the configmap i need to run inside your container. to update my sql
+            - name: usermgmt-dbscript 
+              mountPath: /docker-entrypoint-initdb.d #this defination is given in hub.docker.com
+        #but outside your container it need to be attached with mnt data. 
+        volumes: #the name of the volume and the mount will be same
+          - name: mysql-persistent-volume 
+            persistentVolumeClaim:
+            #mapped to pvc claim we created earlier
+              claimName: task-pv-claim
+          - name: usermgmt-dbscript
+            configMap: 
+              name: usermgmt-dbcreation-script
