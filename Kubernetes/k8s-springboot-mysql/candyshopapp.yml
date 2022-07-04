@@ -18,16 +18,16 @@ spec:
     spec: #we define container spec
         containers:
           - name: candyshopapp  
-            image: a30sham/candyshopapp
+            image: a30sham/candyshopjwt
             ports:
               - containerPort: 8080 
             env:
               - name: MYSQL_HOST
-                value: "192.168.157.26"
+                value: "192.168.157.17"
               - name: MYSQL_PORT
                 value: "3306"
               - name: MYSQL_DB 
-                value: "webappdb"
+                value: "candyshopdb"
               - name: MYSQL_USER
                 value: "root"
               - name: MYSQL_ROOT_PASSWORD

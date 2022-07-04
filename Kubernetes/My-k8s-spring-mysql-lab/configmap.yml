@@ -4,5 +4,5 @@ metadata:
   name: myapp-config
 data:
   mysql_usermgmt.sql: |
-    DROP DATABASE IF EXISTS employeedb;
-    CREATE DATABASE employeedb;
+    DROP DATABASE IF EXISTS candyshopdb;
+    CREATE DATABASE candyshopdb;
