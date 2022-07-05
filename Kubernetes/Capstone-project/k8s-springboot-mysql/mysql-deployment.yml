@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mysql 
+  template:
+    metadata:
+      name: mysql
+      labels: 
+        app: mysql 
+    spec:
+        containers:
+          - name: mysql  
+            image: mysql
+            env:
+              - name: MYSQL_ROOT_PASSWORD 
+                valueFrom:
+                  secretKeyRef: 
+                    name: my-db-secret
+                    key: dbpassword #data of the secret 
+            ports:
+              - containerPort: 3306 
+                name: mysql 
+              #this volume mount is inside my container
+            volumeMounts:
+            - name: mysql-persistent-volume  
+              mountPath: /var/lib/mysql 
+               
+            - name: usermgmt-dbscript 
+              mountPath: /docker-entrypoint-initdb.d 
+        volumes: #the name of the volume and the mount will be same
+          - name: mysql-persistent-volume 
+            persistentVolumeClaim:
+            #mapped to pvc claim we created earlier
+              claimName: task-pv-claim
+          - name: usermgmt-dbscript
+            configMap: 
+              name: usermgmt-dbcreation-script

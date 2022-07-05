@@ -1,0 +1,8 @@
+apiVersion: v1 
+kind: ConfigMap
+metadata:
+  name: usermgmt-dbcreation-script
+data:
+  mysql_usermgmt.sql: |
+    DROP DATABASE IF EXISTS candyshopdb;
+    CREATE DATABASE candyshopdb;
